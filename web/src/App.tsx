@@ -19,6 +19,26 @@ export function App() {
     };
   }, []);
 
+  // The click keeps its default behaviour — the browser opens the new tab — and
+  // the row dims only once the server has the mark, so a dimmed row is never a
+  // claim the database would contradict on the next load.
+  function markRead(id: number) {
+    fetch(`/api/items/${String(id)}/read`, { method: "POST" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`POST read returned ${String(response.status)}`);
+        }
+        setItems((current) =>
+          current.map((item) =>
+            item.id === id ? { ...item, read: true } : item,
+          ),
+        );
+      })
+      .catch((error: unknown) => {
+        console.error("Could not mark the Item read", error);
+      });
+  }
+
   return (
     <main>
       <h1>Feed Reader</h1>
@@ -30,6 +50,9 @@ export function App() {
               href={item.link ?? undefined}
               target="_blank"
               rel="noreferrer"
+              onClick={() => {
+                markRead(item.id);
+              }}
             >
               {item.title ?? "(untitled)"}
             </a>
