@@ -1,0 +1,1 @@
+Temporary. Proves oracle-guard passes when no fixture is touched. Never merged.
