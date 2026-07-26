@@ -4,6 +4,7 @@ import type { Item } from "./items.js";
 
 interface ItemRow {
   id: number;
+  item_id: string;
   feed_title: string | null;
   title: string | null;
   link: string | null;
@@ -12,7 +13,7 @@ interface ItemRow {
 }
 
 const SELECT_ITEMS = `
-SELECT items.id, feeds.title AS feed_title, items.title, items.link,
+SELECT items.id, items.item_id, feeds.title AS feed_title, items.title, items.link,
        items.published, items.read
 FROM items
 JOIN feeds ON feeds.id = items.feed_id
@@ -34,6 +35,7 @@ export function createApp(options: { databasePath: string }): FastifyInstance {
     // above is what actually fixes their shape, so the cast is the assertion.
     (selectItems.all() as unknown as ItemRow[]).map((row) => ({
       id: row.id,
+      itemId: row.item_id,
       feedTitle: row.feed_title,
       title: row.title,
       link: row.link,
