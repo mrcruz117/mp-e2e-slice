@@ -14,9 +14,15 @@ not weaken or skip one to get a green result.
 | Upstream   | `npm run oracle:upstream` | Fixtures still match pinned feedparser |
 | Oracle     | CI job `oracle-guard`     | No pull request touched the fixtures   |
 
-All eight are required status checks on `main`. `oracle-guard` has no local
-command: it runs from another repository and reads the pull request, so there is
-nothing to run before there is a pull request.
+The first six are required status checks on `main`. `oracle-upstream` and
+`oracle-guard` are not yet — a check cannot be required until it has reported
+once, so they are added after the pull request that introduces them merges. Until
+that happens the oracle is guarded by convention rather than by branch protection.
+
+`oracle-guard` has no local command: it runs from another repository and reads the
+pull request, so there is nothing to run before there is a pull request. Its
+context name is `oracle-guard / oracle-guard`, because reusable workflows report
+as `caller-job / called-job`.
 
 The expectations file is checked twice — `npm test` re-derives it from the
 fixtures, and CI's `oracle-upstream` job runs `npm run oracle:derive -- --check`
