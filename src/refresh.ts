@@ -183,11 +183,36 @@ export async function refresh(options: RefreshOptions): Promise<void> {
   }
 }
 
+export type RefreshTimerOptions = RefreshOptions & {
+  intervalMs: number;
+  /**
+   * Whatever escapes a whole tick — opening the database, say; per-Feed failures
+   * never get this far. Optional, and dropped by default, for the same reason
+   * `logFeedRefresh` is.
+   */
+  logRefreshError?: (error: unknown) => void;
+};
+
 /** Refresh on a timer for as long as the process lives. Returns a stop function. */
-export function startRefreshing(
-  options: RefreshOptions & { intervalMs: number },
-): () => void {
-  throw new Error(
-    `Periodic Refresh is not implemented yet; the interval would be ${String(options.intervalMs)}ms.`,
-  );
+export function startRefreshing(options: RefreshTimerOptions): () => void {
+  const logError = options.logRefreshError ?? (() => undefined);
+  let running = false;
+
+  const timer = setInterval(() => {
+    // A Refresh slower than the interval would otherwise run against the
+    // database concurrently with itself.
+    if (running) return;
+    running = true;
+    // A tick has no caller to catch it: an escaping rejection would be unhandled
+    // and would take down the very process this timer exists to keep current.
+    void refresh(options)
+      .catch(logError)
+      .finally(() => {
+        running = false;
+      });
+  }, options.intervalMs);
+
+  return () => {
+    clearInterval(timer);
+  };
 }
