@@ -7,12 +7,18 @@
 // Written by the periodic Refresh ticket, run red first. Like the other
 // resilience specs these expectations are ours, not feedparser's.
 
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+import type { FastifyInstance } from "fastify";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { createApp } from "../src/app.js";
 import { refresh, startRefreshing } from "../src/refresh.js";
 import type { FeedRefreshLine } from "../src/refresh.js";
+import { start } from "../src/start.js";
 import type { TemporaryDatabase } from "./harness.js";
 import { readItems, temporaryDatabase } from "./harness.js";
+
+const WEB_ROOT = fileURLToPath(new URL("../web", import.meta.url));
 
 const REFRESH_INTERVAL_MS = 15 * 60 * 1000;
 
@@ -30,10 +36,13 @@ const MIDDLE = item("urn:middle", "Middle", "Mon, 01 Jan 2007 00:00:00 GMT");
 
 let database: TemporaryDatabase | undefined;
 let stop: (() => void) | undefined;
+let app: FastifyInstance | undefined;
 
-afterEach(() => {
+afterEach(async () => {
   stop?.();
   stop = undefined;
+  await app?.close();
+  app = undefined;
   database?.remove();
   database = undefined;
   vi.useRealTimers();
@@ -106,7 +115,7 @@ describe("an interval Refresh disturbs nothing the reader already has", () => {
 describe("an interval Refresh survives what a boot Refresh survives", () => {
   test("a Feed failing on a tick costs one Feed, and later ticks still run", async () => {
     database = temporaryDatabase();
-    let bodies = blog(NEW);
+    let body = blog(NEW);
 
     vi.useFakeTimers();
     stop = startRefreshing({
@@ -114,7 +123,7 @@ describe("an interval Refresh survives what a boot Refresh survives", () => {
       feeds: ["dead", "blog"],
       fetchFeed: (url) =>
         url === "blog"
-          ? Promise.resolve({ status: 200, body: bodies })
+          ? Promise.resolve({ status: 200, body })
           : Promise.reject(new Error("getaddrinfo ENOTFOUND dead.example.com")),
       intervalMs: REFRESH_INTERVAL_MS,
     });
@@ -124,7 +133,7 @@ describe("an interval Refresh survives what a boot Refresh survives", () => {
       "New",
     ]);
 
-    bodies = blog(NEW + MIDDLE);
+    body = blog(NEW + MIDDLE);
     await vi.advanceTimersByTimeAsync(REFRESH_INTERVAL_MS);
     expect((await readItems(database.path)).map(({ title }) => title)).toEqual([
       "New",
@@ -165,7 +174,7 @@ describe("an interval Refresh survives what a boot Refresh survives", () => {
       feeds: ["blog"],
       fetchFeed: () => {
         fetches += 1;
-        // Never settles: the Refresh's own 10s timeout is what ends this tick.
+        // Never settles, so the tick is still in flight at every later tick.
         return new Promise<never>(() => undefined);
       },
       // Short enough that ticks queue up behind a Refresh that is still going.
@@ -174,5 +183,57 @@ describe("an interval Refresh survives what a boot Refresh survives", () => {
 
     await vi.advanceTimersByTimeAsync(5000);
     expect(fetches).toBe(1);
+  });
+
+  test("a tick that fails outright is reported and the timer carries on", async () => {
+    const path = await seed(blog(NEW));
+
+    vi.useFakeTimers();
+    const errors: unknown[] = [];
+    stop = startRefreshing({
+      // The seeded database is a file, not a directory, so opening this path
+      // throws before any Feed is reached — a failure `refresh()` cannot
+      // contain, because it is not a Feed's.
+      databasePath: join(path, "nested.db"),
+      feeds: ["blog"],
+      fetchFeed: () => Promise.resolve({ status: 200, body: blog(NEW) }),
+      intervalMs: REFRESH_INTERVAL_MS,
+      logRefreshError: (error) => errors.push(error),
+    });
+    await vi.advanceTimersByTimeAsync(REFRESH_INTERVAL_MS * 2);
+
+    expect(errors).toHaveLength(2);
+    expect(errors[0]).toBeInstanceOf(Error);
+  });
+});
+
+describe("the app itself keeps Refreshing after boot", () => {
+  test("an Item published after boot reaches the reader on the configured interval", async () => {
+    database = temporaryDatabase();
+    let body = blog(NEW);
+
+    // Real timers: this grades that boot schedules the timer at all, which a
+    // fake clock driven by the spec itself could not tell apart from nothing.
+    app = await start({
+      databasePath: database.path,
+      feeds: ["blog"],
+      fetchFeed: () => Promise.resolve({ status: 200, body }),
+      refreshIntervalMs: 25,
+      webRoot: WEB_ROOT,
+      host: "127.0.0.1",
+      port: 0,
+    });
+    expect((await readItems(database.path)).map(({ title }) => title)).toEqual([
+      "New",
+    ]);
+
+    body = blog(NEW + MIDDLE);
+    await expect
+      .poll(
+        async () =>
+          (await readItems(database?.path ?? "")).map(({ title }) => title),
+        { timeout: 5000 },
+      )
+      .toEqual(["New", "Middle"]);
   });
 });

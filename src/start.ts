@@ -4,11 +4,9 @@
 import fastifyStatic from "@fastify/static";
 import type { FastifyInstance } from "fastify";
 import { createApp } from "./app.js";
+import { DEFAULT_REFRESH_INTERVAL_MS } from "./config.js";
 import { refresh, startRefreshing } from "./refresh.js";
 import type { RefreshOptions } from "./refresh.js";
-
-/** Render sleeps after 15 minutes idle; a longer interval would rarely fire. */
-export const DEFAULT_REFRESH_INTERVAL_MS = 15 * 60 * 1000;
 
 export type StartOptions = RefreshOptions & {
   webRoot: string;

@@ -1,13 +1,13 @@
 import { fileURLToPath } from "node:url";
-import { loadFeeds } from "./config.js";
-import { DEFAULT_REFRESH_INTERVAL_MS, start } from "./start.js";
+import { loadFeeds, loadRefreshIntervalMs } from "./config.js";
+import { start } from "./start.js";
 import type { FetchedFeed } from "./refresh.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 const DATABASE_PATH = process.env.DATABASE_PATH ?? "data/feeds.db";
 const FEEDS_CONFIG = process.env.FEEDS_CONFIG ?? "feeds.json";
-const REFRESH_INTERVAL_MS = Number(
-  process.env.REFRESH_INTERVAL_MS ?? DEFAULT_REFRESH_INTERVAL_MS,
+const REFRESH_INTERVAL_MS = loadRefreshIntervalMs(
+  process.env.REFRESH_INTERVAL_MS,
 );
 
 // dist/server/server.js -> dist/web
