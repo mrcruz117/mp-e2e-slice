@@ -15,9 +15,19 @@ export type StartOptions = RefreshOptions & {
 
 /** Resolves once the server is accepting connections, never before. */
 export async function start(options: StartOptions): Promise<FastifyInstance> {
-  await refresh(options);
-
+  // Built before the Refresh only so the Refresh has somewhere to log; it is
+  // still not listening until the Refresh has finished.
   const app = createApp({ databasePath: options.databasePath });
+
+  await refresh({
+    ...options,
+    logFeedRefresh:
+      options.logFeedRefresh ??
+      ((line) => {
+        app.log.info(line, "feed refresh");
+      }),
+  });
+
   await app.register(fastifyStatic, { root: options.webRoot });
   await app.listen({ host: options.host, port: options.port });
   return app;

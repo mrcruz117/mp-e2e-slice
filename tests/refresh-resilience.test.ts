@@ -34,7 +34,7 @@ function withBadFeed(bad: () => Promise<FetchedFeed>) {
   };
 }
 
-describe.skip("a failing Feed leaves every other Feed working", () => {
+describe("a failing Feed leaves every other Feed working", () => {
   test("an unreachable Feed is skipped and the Refresh completes", async () => {
     const options = withBadFeed(() =>
       Promise.reject(new Error("getaddrinfo ENOTFOUND bad.example.com")),
