@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { loadFeeds } from "./config.js";
 import { start } from "./start.js";
-import type { FetchedFeed } from "./refresh.js";
+import type { FeedRefreshLine, FetchedFeed } from "./refresh.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 const DATABASE_PATH = process.env.DATABASE_PATH ?? "data/feeds.db";
@@ -16,10 +16,16 @@ async function fetchFeedOverHttp(url: string): Promise<FetchedFeed> {
   return { status: response.status, body: await response.text() };
 }
 
+/** One structured line per Feed per Refresh, on stdout with everything else. */
+function logFeedRefresh(line: FeedRefreshLine): void {
+  process.stdout.write(`${JSON.stringify({ msg: "feed refresh", ...line })}\n`);
+}
+
 await start({
   databasePath: DATABASE_PATH,
   feeds: loadFeeds(FEEDS_CONFIG),
   fetchFeed: fetchFeedOverHttp,
+  logFeedRefresh,
   webRoot: WEB_ROOT,
   // Render reaches the container only on 0.0.0.0.
   host: "0.0.0.0",
