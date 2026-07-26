@@ -17,6 +17,8 @@ export default defineConfig({
       PORT: String(PORT),
       // A fresh file per run, so a stale database can never make a spec pass.
       DATABASE_PATH: "data/e2e.db",
+      // No Feeds: the specs that need Items supply them through the fetch seam.
+      FEEDS_CONFIG: "e2e/feeds.empty.json",
     },
   },
 });

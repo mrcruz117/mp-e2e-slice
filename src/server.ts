@@ -1,16 +1,27 @@
-import fastifyStatic from "@fastify/static";
 import { fileURLToPath } from "node:url";
-import { createApp } from "./app.js";
+import { loadFeeds } from "./config.js";
+import { start } from "./start.js";
+import type { FetchedFeed } from "./refresh.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 const DATABASE_PATH = process.env.DATABASE_PATH ?? "data/feeds.db";
+const FEEDS_CONFIG = process.env.FEEDS_CONFIG ?? "feeds.json";
 
 // dist/server/server.js -> dist/web
 const WEB_ROOT = fileURLToPath(new URL("../web", import.meta.url));
 
-const app = createApp({ databasePath: DATABASE_PATH });
+/** The seam, in production: a Feed's XML over HTTP. */
+async function fetchFeedOverHttp(url: string): Promise<FetchedFeed> {
+  const response = await fetch(url, { headers: { accept: "application/xml" } });
+  return { status: response.status, body: await response.text() };
+}
 
-await app.register(fastifyStatic, { root: WEB_ROOT });
-
-// Render reaches the container only on 0.0.0.0.
-await app.listen({ host: "0.0.0.0", port: PORT });
+await start({
+  databasePath: DATABASE_PATH,
+  feeds: loadFeeds(FEEDS_CONFIG),
+  fetchFeed: fetchFeedOverHttp,
+  webRoot: WEB_ROOT,
+  // Render reaches the container only on 0.0.0.0.
+  host: "0.0.0.0",
+  port: PORT,
+});
