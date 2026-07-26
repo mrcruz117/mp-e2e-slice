@@ -7,9 +7,9 @@
 // is what replaces the hand-translation ADR-0002 describes, and it closes the
 // risk that ADR names: a translation error weakening the oracle silently.
 //
-//   node scripts/oracle.ts vendor [--upstream <dir>]
+//   node scripts/oracle.ts vendor
 //   node scripts/oracle.ts derive [--check]
-//   node scripts/oracle.ts upstream [--upstream <dir>]
+//   node scripts/oracle.ts upstream
 
 import { execFileSync } from "node:child_process";
 import {
@@ -66,9 +66,8 @@ export interface Expectation {
   description: string;
   /** The `Expect:` expression, verbatim, so the transcription can be audited. */
   expect: string;
+  /** Item scope always means entry 0; no accepted expression reaches further. */
   scope: "feed" | "item";
-  /** Present only for item scope; every accepted expression targets entry 0. */
-  index?: number;
   /** feedparser's field name, untranslated. Mapping it is the reader's job. */
   field: string;
   value: string | number[];
@@ -109,9 +108,14 @@ export function transcribe(file: string, xml: string): Expectation | undefined {
   const value = parsePythonLiteral(literal);
   if (value === undefined) return undefined;
 
-  return scope === "feed"
-    ? { file, description, expect, scope: "feed", field, value }
-    : { file, description, expect, scope: "item", index: 0, field, value };
+  return {
+    file,
+    description,
+    expect,
+    scope: scope === "feed" ? "feed" : "item",
+    field,
+    value,
+  };
 }
 
 function readFixture(path: string): string {
@@ -161,11 +165,8 @@ export function deriveFromVendoredFixtures(): string {
   return renderExpectations(select(inVendor));
 }
 
-function withUpstream<T>(
-  provided: string | undefined,
-  use: (root: string) => T,
-): T {
-  if (provided) return use(provided);
+/** feedparser at the pinned commit, fetched fresh and thrown away afterwards. */
+function withUpstream<T>(use: (root: string) => T): T {
   const scratch = mkdtempSync(join(tmpdir(), "feedparser-"));
   try {
     const git = (...args: string[]) =>
@@ -199,11 +200,12 @@ transcribable subset are vendored — one comparison against one top-level field
 by \`node scripts/oracle.ts derive\` and re-derived on every test run, so it
 cannot drift from the fixtures. Field names in it are feedparser's, untranslated.
 
-See \`docs/adr/0002-oracle-vendored-from-feedparser-and-externally-guarded.md\`.
+See \`docs/adr/0002-oracle-vendored-from-feedparser-and-externally-guarded.md\`
+and \`docs/adr/0003-expectations-are-derived-not-translated.md\`.
 `;
 
-function vendor(upstreamDir: string | undefined): void {
-  withUpstream(upstreamDir, (root) => {
+function vendor(): void {
+  withUpstream((root) => {
     const selected = select(inUpstream(root));
 
     rmSync(VENDOR_DIR, { recursive: true, force: true });
@@ -246,8 +248,8 @@ function derive(check: boolean): void {
   );
 }
 
-function upstream(upstreamDir: string | undefined): void {
-  withUpstream(upstreamDir, (root) => {
+function upstream(): void {
+  withUpstream((root) => {
     const problems: string[] = [];
 
     // The selection itself is part of the claim: a fixture upstream changed so
@@ -297,23 +299,18 @@ function upstream(upstreamDir: string | undefined): void {
   });
 }
 
-function flagValue(argv: string[], flag: string): string | undefined {
-  const index = argv.indexOf(flag);
-  return index === -1 ? undefined : argv[index + 1];
-}
-
 // The test suite imports the derivation; only the command line runs a command.
 if (import.meta.filename === process.argv[1]) {
   const [command, ...argv] = process.argv.slice(2);
   switch (command) {
     case "vendor":
-      vendor(flagValue(argv, "--upstream"));
+      vendor();
       break;
     case "derive":
       derive(argv.includes("--check"));
       break;
     case "upstream":
-      upstream(flagValue(argv, "--upstream"));
+      upstream();
       break;
     default:
       throw new Error("Usage: node scripts/oracle.ts <vendor|derive|upstream>");

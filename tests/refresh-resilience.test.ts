@@ -6,6 +6,7 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { refresh } from "../src/refresh.js";
 import type { FetchedFeed } from "../src/refresh.js";
+import type { TemporaryDatabase } from "./harness.js";
 import { readItems, temporaryDatabase } from "./harness.js";
 
 const GOOD = `<rss version="2.0"><channel><title>Good</title>
@@ -14,7 +15,7 @@ const GOOD = `<rss version="2.0"><channel><title>Good</title>
 
 const FETCH_TIMEOUT_MS = 10_000;
 
-let database: { path: string; remove: () => void } | undefined;
+let database: TemporaryDatabase | undefined;
 
 afterEach(() => {
   database?.remove();

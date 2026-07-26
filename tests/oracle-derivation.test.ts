@@ -2,23 +2,11 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "vitest";
 import { deriveFromVendoredFixtures, transcribe } from "../scripts/oracle.js";
+import { loadExpectations } from "./oracle.js";
 
 const EXPECTATIONS_PATH = fileURLToPath(
   new URL("./fixtures/expectations.json", import.meta.url),
 );
-
-interface Expectations {
-  expectations: {
-    file: string;
-    field: string;
-    scope: string;
-    value: string | number[];
-  }[];
-}
-
-function committed(): Expectations {
-  return JSON.parse(readFileSync(EXPECTATIONS_PATH, "utf8")) as Expectations;
-}
 
 test("the expectations file still matches the Expect: comments it came from", () => {
   // The whole point of the oracle is that nobody in this repository authored it.
@@ -30,7 +18,7 @@ test("the expectations file still matches the Expect: comments it came from", ()
 });
 
 test("the oracle covers both feed formats and every field the reader extracts", () => {
-  const { expectations } = committed();
+  const expectations = loadExpectations();
 
   const formats = new Set(
     expectations.map(({ file }) => file.split("/")[1] ?? ""),
@@ -60,7 +48,6 @@ test("transcribing reads feedparser's literal exactly, quoting and all", () => {
     ),
   ).toMatchObject({
     scope: "item",
-    index: 0,
     field: "title",
     value: "Item 1 title",
   });

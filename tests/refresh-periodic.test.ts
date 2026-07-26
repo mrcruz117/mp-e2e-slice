@@ -5,6 +5,7 @@
 
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { startRefreshing } from "../src/refresh.js";
+import type { TemporaryDatabase } from "./harness.js";
 import { readItems, temporaryDatabase } from "./harness.js";
 
 const REFRESH_INTERVAL_MS = 15 * 60 * 1000;
@@ -14,7 +15,7 @@ const feed = (guid: string, title: string) =>
 <item><guid>${guid}</guid><title>${title}</title></item>
 </channel></rss>`;
 
-let database: { path: string; remove: () => void } | undefined;
+let database: TemporaryDatabase | undefined;
 let stop: (() => void) | undefined;
 
 afterEach(() => {

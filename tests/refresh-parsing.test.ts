@@ -8,6 +8,7 @@
 import { afterEach, describe, expect, test } from "vitest";
 import { refresh } from "../src/refresh.js";
 import { loadExpectations, serveFixtures } from "./oracle.js";
+import type { TemporaryDatabase } from "./harness.js";
 import { readItems, temporaryDatabase } from "./harness.js";
 
 const expectations = loadExpectations();
@@ -16,7 +17,7 @@ const itemScoped = expectations.filter(({ scope }) => scope === "item");
 const forField = (...fields: string[]) =>
   itemScoped.filter(({ field }) => fields.includes(field));
 
-let database: { path: string; remove: () => void } | undefined;
+let database: TemporaryDatabase | undefined;
 
 afterEach(() => {
   database?.remove();

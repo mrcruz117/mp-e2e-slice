@@ -6,6 +6,7 @@
 import { afterEach, describe, expect, test } from "vitest";
 import { createApp } from "../src/app.js";
 import { refresh } from "../src/refresh.js";
+import type { TemporaryDatabase } from "./harness.js";
 import { readItems, temporaryDatabase } from "./harness.js";
 
 const TWO_ITEMS = `<rss version="2.0"><channel><title>Blog</title>
@@ -13,7 +14,7 @@ const TWO_ITEMS = `<rss version="2.0"><channel><title>Blog</title>
 <item><guid>urn:2</guid><title>Second</title><link>http://example.com/2</link></item>
 </channel></rss>`;
 
-let database: { path: string; remove: () => void } | undefined;
+let database: TemporaryDatabase | undefined;
 
 afterEach(() => {
   database?.remove();

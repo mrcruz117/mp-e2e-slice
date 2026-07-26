@@ -18,7 +18,6 @@
       "description": "entry id maps to guid",
       "expect": "not bozo and entries[0]['guid'] == 'http://example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "guid",
       "value": "http://example.com/"
     },
@@ -27,7 +26,6 @@
       "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
       "expect": "not bozo and entries[0]['id'] == 'http://www.example.org/thing'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "http://www.example.org/thing"
     },
@@ -36,7 +34,6 @@
       "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
       "expect": "not bozo and entries[0]['id'] == 'http://www.example.org/Thing'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "http://www.example.org/Thing"
     },
@@ -45,7 +42,6 @@
       "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
       "expect": "not bozo and entries[0]['id'] == 'http://www.EXAMPLE.org/thing'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "http://www.EXAMPLE.org/thing"
     },
@@ -54,7 +50,6 @@
       "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
       "expect": "not bozo and entries[0]['id'] == 'HTTP://www.example.org/thing'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "HTTP://www.example.org/thing"
     },
@@ -63,7 +58,6 @@
       "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
       "expect": "not bozo and entries[0]['id'] == 'http://www.example.com/~bob'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "http://www.example.com/~bob"
     },
@@ -72,7 +66,6 @@
       "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
       "expect": "not bozo and entries[0]['id'] == 'http://www.example.com/%7ebob'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "http://www.example.com/%7ebob"
     },
@@ -81,7 +74,6 @@
       "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
       "expect": "not bozo and entries[0]['id'] == 'http://www.example.com/%7Ebob'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "http://www.example.com/%7Ebob"
     },
@@ -90,7 +82,6 @@
       "description": "entry id retrieved when element contains attributes",
       "expect": "not bozo and entries[0]['id'] == 'right'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "right"
     },
@@ -99,7 +90,6 @@
       "description": "entry id",
       "expect": "not bozo and entries[0]['id'] == 'http://example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "http://example.com/"
     },
@@ -108,7 +98,6 @@
       "description": "entry link href maps to link if rel=\"alternate\" and type=\"application/xhtml+xml\"",
       "expect": "not bozo and entries[0]['link'] == 'http://www.example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://www.example.com/"
     },
@@ -117,7 +106,6 @@
       "description": "entry link href maps to link if rel=\"alternate\", even if type is not present",
       "expect": "not bozo and entries[0]['link'] == 'http://www.example.com/alternate'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://www.example.com/alternate"
     },
@@ -126,7 +114,6 @@
       "description": "entry link href maps to link if rel=\"alternate\" and type=\"text/html\"",
       "expect": "not bozo and entries[0]['link'] == 'http://www.example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://www.example.com/"
     },
@@ -135,7 +122,6 @@
       "description": "entry title base64-encoded",
       "expect": "not bozo and entries[0]['title'] == '<p>History of the &lt;blink&gt; tag</p>'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "<p>History of the &lt;blink&gt; tag</p>"
     },
@@ -144,7 +130,6 @@
       "description": "entry title base64-encoded",
       "expect": "not bozo and entries[0]['title'] == 'Example <b>Atom</b>'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "Example <b>Atom</b>"
     },
@@ -153,7 +138,6 @@
       "description": "entry title escaped HTML",
       "expect": "not bozo and entries[0]['title'] == 'Example <b>Atom</b>'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "Example <b>Atom</b>"
     },
@@ -162,7 +146,6 @@
       "description": "entry title inline XHTML with escaped markup",
       "expect": "not bozo and entries[0]['title'] == 'History of the &lt;blink&gt; tag'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "History of the &lt;blink&gt; tag"
     },
@@ -171,7 +154,6 @@
       "description": "entry title inline XHTML",
       "expect": "not bozo and entries[0]['title'] == 'Example <b>Atom</b>'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "Example <b>Atom</b>"
     },
@@ -180,7 +162,6 @@
       "description": "entry title with explicit type='text' contains brackets that are not markup",
       "expect": "not bozo and entries[0]['title'] == 'History of the <blink> tag'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "History of the <blink> tag"
     },
@@ -189,7 +170,6 @@
       "description": "entry title with explicit type='text'",
       "expect": "not bozo and entries[0]['title'] == 'Example Atom'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "Example Atom"
     },
@@ -198,7 +178,6 @@
       "description": "entry title type='' - no base64/unicodedecodeerror crash",
       "expect": "entries[0]['title'] == 'evil'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "evil"
     },
@@ -207,7 +186,6 @@
       "description": "entry title",
       "expect": "not bozo and entries[0]['title'] == 'Example Atom'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "Example Atom"
     },
@@ -514,7 +492,6 @@
       "description": "AT&T",
       "expect": "not bozo and entries[0]['guid'] == 'tag:example.com,2006-05-04:/blog/'",
       "scope": "item",
-      "index": 0,
       "field": "guid",
       "value": "tag:example.com,2006-05-04:/blog/"
     },
@@ -523,7 +500,6 @@
       "description": "item dc:date parsed",
       "expect": "not bozo and entries[0]['updated_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
       "scope": "item",
-      "index": 0,
       "field": "updated_parsed",
       "value": [
         2003,
@@ -542,7 +518,6 @@
       "description": "item dc:date",
       "expect": "not bozo and entries[0]['updated'] == '2003-12-31T10:14:55Z'",
       "scope": "item",
-      "index": 0,
       "field": "updated",
       "value": "2003-12-31T10:14:55Z"
     },
@@ -551,7 +526,6 @@
       "description": "item dc:title",
       "expect": "not bozo and entries[0]['title'] == 'Example title'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "Example title"
     },
@@ -560,7 +534,6 @@
       "description": "item dcterms:issued parsed",
       "expect": "not bozo and entries[0]['published_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
       "scope": "item",
-      "index": 0,
       "field": "published_parsed",
       "value": [
         2003,
@@ -579,7 +552,6 @@
       "description": "item dcterms:issued",
       "expect": "not bozo and entries[0]['published'] == '2003-12-31T10:14:55Z'",
       "scope": "item",
-      "index": 0,
       "field": "published",
       "value": "2003-12-31T10:14:55Z"
     },
@@ -588,7 +560,6 @@
       "description": "item dcterms:modified parsed",
       "expect": "not bozo and entries[0]['updated_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
       "scope": "item",
-      "index": 0,
       "field": "updated_parsed",
       "value": [
         2003,
@@ -607,7 +578,6 @@
       "description": "item dcterms:modified",
       "expect": "not bozo and entries[0]['updated'] == '2003-12-31T10:14:55Z'",
       "scope": "item",
-      "index": 0,
       "field": "updated",
       "value": "2003-12-31T10:14:55Z"
     },
@@ -616,7 +586,6 @@
       "description": "item guid does not override link",
       "expect": "not bozo and entries[0]['link'] == 'http://link.example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://link.example.com/"
     },
@@ -625,7 +594,6 @@
       "description": "item guid does not override link even if isPermaLink=\"true\"",
       "expect": "not bozo and entries[0]['link'] == 'http://link.example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://link.example.com/"
     },
@@ -634,7 +602,6 @@
       "description": "item guid maps to link when isPermaLink=\"true\"",
       "expect": "not bozo and entries[0]['link'] == 'http://guid.example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://guid.example.com/"
     },
@@ -643,7 +610,6 @@
       "description": "item guid maps to link",
       "expect": "not bozo and entries[0]['link'] == 'http://guid.example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://guid.example.com/"
     },
@@ -652,7 +618,6 @@
       "description": "item guid (not permalink) is not duplicated into link",
       "expect": "not bozo and entries[0]['link'] == 'http://link.example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://link.example.com/"
     },
@@ -661,7 +626,6 @@
       "description": "item guid not permalink is not resolved as a URL",
       "expect": "not bozo and entries[0]['id'] == 'abc'",
       "scope": "item",
-      "index": 0,
       "field": "id",
       "value": "abc"
     },
@@ -670,7 +634,6 @@
       "description": "item guid",
       "expect": "not bozo and entries[0]['guid'] == 'http://guid.example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "guid",
       "value": "http://guid.example.com/"
     },
@@ -679,7 +642,6 @@
       "description": "image link does not conflict with item link",
       "expect": "not bozo and entries[0]['link'] == 'http://item.TEST/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://item.TEST/"
     },
@@ -688,7 +650,6 @@
       "description": "item link",
       "expect": "not bozo and entries[0]['link'] == 'http://example.com/'",
       "scope": "item",
-      "index": 0,
       "field": "link",
       "value": "http://example.com/"
     },
@@ -697,7 +658,6 @@
       "description": "item pubDate parsed and mapped to published_parsed",
       "expect": "not bozo and entries[0]['published_parsed'] == (2004, 1, 1, 19, 48, 21, 3, 1, 0)",
       "scope": "item",
-      "index": 0,
       "field": "published_parsed",
       "value": [
         2004,
@@ -716,7 +676,6 @@
       "description": "item pubDate",
       "expect": "not bozo and entries[0]['published'] == 'Thu, 01 Jan 2004 19:48:21 GMT'",
       "scope": "item",
-      "index": 0,
       "field": "published",
       "value": "Thu, 01 Jan 2004 19:48:21 GMT"
     },
@@ -725,7 +684,6 @@
       "description": "item title",
       "expect": "not bozo and entries[0]['title'] == 'Item 1 title'",
       "scope": "item",
-      "index": 0,
       "field": "title",
       "value": "Item 1 title"
     }

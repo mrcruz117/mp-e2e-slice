@@ -5,6 +5,7 @@
 
 import { afterEach, describe, expect, test } from "vitest";
 import { refresh } from "../src/refresh.js";
+import type { TemporaryDatabase } from "./harness.js";
 import { readItems, temporaryDatabase } from "./harness.js";
 
 const OLD_AND_NEW = `<rss version="2.0"><channel><title>Dated</title>
@@ -20,7 +21,7 @@ const UNPARSEABLE_DATE = `<rss version="2.0"><channel><title>Sloppy</title>
 <item><guid>urn:sloppy</guid><title>Sloppy</title><pubDate>whenever, really</pubDate></item>
 </channel></rss>`;
 
-let database: { path: string; remove: () => void } | undefined;
+let database: TemporaryDatabase | undefined;
 
 afterEach(() => {
   database?.remove();

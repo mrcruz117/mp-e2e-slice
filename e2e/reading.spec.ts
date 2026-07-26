@@ -36,7 +36,7 @@ test.describe.skip("reading the list", () => {
     }
   });
 
-  test("clicking a title opens the post in a new tab and dims the row in place", async ({
+  test("clicking a title opens the Item's link in a new tab and dims the row in place", async ({
     context,
     page,
   }) => {
@@ -48,8 +48,8 @@ test.describe.skip("reading the list", () => {
 
     const opened = context.waitForEvent("page");
     await row.getByTestId("item-title").click();
-    const post = await opened;
-    expect(post.url()).not.toBe(page.url());
+    const linked = await opened;
+    expect(linked.url()).not.toBe(page.url());
 
     // Read, not gone: the row stays where it was and only dims.
     await expect(row).toHaveAttribute("data-read", "true");

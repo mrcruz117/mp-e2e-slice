@@ -8,7 +8,12 @@ import { join } from "node:path";
 import { createApp } from "../src/app.js";
 import type { Item } from "../src/items.js";
 
-export function temporaryDatabase(): { path: string; remove: () => void } {
+export interface TemporaryDatabase {
+  path: string;
+  remove: () => void;
+}
+
+export function temporaryDatabase(): TemporaryDatabase {
   const directory = mkdtempSync(join(tmpdir(), "feed-reader-"));
   return {
     path: join(directory, "test.db"),

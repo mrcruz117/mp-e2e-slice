@@ -4,18 +4,9 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { FetchFeed } from "../src/refresh.js";
+import type { Expectation } from "../scripts/oracle.js";
 
-export interface Expectation {
-  /** Path within `tests/fixtures/`, e.g. `wellformed/rss/item_title.xml`. */
-  file: string;
-  description: string;
-  expect: string;
-  scope: "feed" | "item";
-  index?: number;
-  /** feedparser's field name: title, link, guid, id, published, updated, ±_parsed. */
-  field: string;
-  value: string | number[];
-}
+export type { Expectation };
 
 const FIXTURES = new URL("./fixtures/", import.meta.url);
 
