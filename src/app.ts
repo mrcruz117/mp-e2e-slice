@@ -22,6 +22,9 @@ JOIN feeds ON feeds.id = items.feed_id
 ORDER BY COALESCE(items.published, items.first_seen) DESC, items.id DESC
 `;
 
+// Read state is set, never unset: a repeat mark writes the same value.
+const MARK_READ = `UPDATE items SET read = 1 WHERE id = ?`;
+
 export function createApp(options: { databasePath: string }): FastifyInstance {
   const db = openDatabase(options.databasePath);
   const app = Fastify({ logger: true });
@@ -44,6 +47,24 @@ export function createApp(options: { databasePath: string }): FastifyInstance {
       published: row.published,
       read: row.read !== 0,
     })),
+  );
+
+  const markRead = db.prepare(MARK_READ);
+
+  app.post<{ Params: { id: number } }>(
+    "/api/items/:id/read",
+    {
+      schema: {
+        params: { type: "object", properties: { id: { type: "integer" } } },
+      },
+    },
+    (request, reply) => {
+      const { changes } = markRead.run(request.params.id);
+      if (changes === 0n) {
+        return reply.code(404).send({ message: "No such Item" });
+      }
+      return reply.code(204).send();
+    },
   );
 
   return app;
