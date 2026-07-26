@@ -4,6 +4,7 @@ import type { Item } from "./items.js";
 
 interface ItemRow {
   id: number;
+  item_id: string;
   feed_title: string | null;
   title: string | null;
   link: string | null;
@@ -12,11 +13,13 @@ interface ItemRow {
 }
 
 const SELECT_ITEMS = `
-SELECT items.id, feeds.title AS feed_title, items.title, items.link,
+SELECT items.id, items.item_id, feeds.title AS feed_title, items.title, items.link,
        items.published, items.read
 FROM items
 JOIN feeds ON feeds.id = items.feed_id
-ORDER BY COALESCE(items.published, items.first_seen) DESC
+-- Items first seen in the same Refresh share a date; the rowid breaks the tie,
+-- so a position is the same on every read.
+ORDER BY COALESCE(items.published, items.first_seen) DESC, items.id DESC
 `;
 
 export function createApp(options: { databasePath: string }): FastifyInstance {
@@ -34,6 +37,7 @@ export function createApp(options: { databasePath: string }): FastifyInstance {
     // above is what actually fixes their shape, so the cast is the assertion.
     (selectItems.all() as unknown as ItemRow[]).map((row) => ({
       id: row.id,
+      itemId: row.item_id,
       feedTitle: row.feed_title,
       title: row.title,
       link: row.link,

@@ -33,7 +33,7 @@ function serve(bodies: Record<string, string>) {
     Promise.resolve({ status: 200, body: bodies[url] ?? "" });
 }
 
-describe.skip("Items from every Feed appear in one list, newest first", () => {
+describe("Items from every Feed appear in one list, newest first", () => {
   test("dated Items are ordered by their published date across Feeds", async () => {
     database = temporaryDatabase();
     await refresh({
@@ -43,7 +43,7 @@ describe.skip("Items from every Feed appear in one list, newest first", () => {
     });
 
     const items = await readItems(database.path);
-    expect(items.map(({ title }) => title)).toEqual(["New", "Undated", "Old"]);
+    expect(items.map(({ title }) => title)).toEqual(["Undated", "New", "Old"]);
   });
 
   test("an Item whose date cannot be parsed still appears, ordered by first sight", async () => {

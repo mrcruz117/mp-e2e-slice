@@ -28,7 +28,7 @@ afterEach(() => {
   database = undefined;
 });
 
-describe.skip("a Refresh inserts only Items it has not seen", () => {
+describe("a Refresh inserts only Items it has not seen", () => {
   test("a second Refresh of unchanged Feeds inserts nothing", async () => {
     database = temporaryDatabase();
     const options = {

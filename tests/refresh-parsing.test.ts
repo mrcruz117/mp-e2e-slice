@@ -11,8 +11,36 @@ import { loadExpectations, serveFixtures } from "./oracle.js";
 import type { TemporaryDatabase } from "./harness.js";
 import { readItems, temporaryDatabase } from "./harness.js";
 
+// Nineteen fixtures hang their expectation on an Item carrying no guid, no id
+// and no link. Story 14 skips such an Item, so it never reaches the read
+// endpoint and nothing here can grade it. Naming them keeps the gap auditable:
+// an Item dropped for any other reason still fails this spec.
+const NO_PUBLISHER_IDENTITY = new Set([
+  "wellformed/atom10/entry_title.xml",
+  "wellformed/atom10/entry_title_base64.xml",
+  "wellformed/atom10/entry_title_base64_2.xml",
+  "wellformed/atom10/entry_title_escaped_markup.xml",
+  "wellformed/atom10/entry_title_inline_markup.xml",
+  "wellformed/atom10/entry_title_inline_markup_2.xml",
+  "wellformed/atom10/entry_title_text_plain.xml",
+  "wellformed/atom10/entry_title_text_plain_brackets.xml",
+  "wellformed/atom10/entry_title_type_empty-no-crash.xml",
+  "wellformed/rss/item_dc_date.xml",
+  "wellformed/rss/item_dc_date_parsed.xml",
+  "wellformed/rss/item_dc_title.xml",
+  "wellformed/rss/item_dcterms_issued.xml",
+  "wellformed/rss/item_dcterms_issued_parsed.xml",
+  "wellformed/rss/item_dcterms_modified.xml",
+  "wellformed/rss/item_dcterms_modified_parsed.xml",
+  "wellformed/rss/item_pubDate.xml",
+  "wellformed/rss/item_pubDate_map_updated_parsed.xml",
+  "wellformed/rss/item_title.xml",
+]);
+
 const expectations = loadExpectations();
-const itemScoped = expectations.filter(({ scope }) => scope === "item");
+const itemScoped = expectations.filter(
+  ({ scope, file }) => scope === "item" && !NO_PUBLISHER_IDENTITY.has(file),
+);
 
 const forField = (...fields: string[]) =>
   itemScoped.filter(({ field }) => fields.includes(field));
@@ -35,7 +63,7 @@ async function itemsFrom(file: string) {
   return readItems(database.path);
 }
 
-describe.skip("the reader extracts what feedparser says a Feed contains", () => {
+describe("the reader extracts what feedparser says a Feed contains", () => {
   for (const expectation of forField("title")) {
     test(`${expectation.file}: ${expectation.description}`, async () => {
       const items = await itemsFrom(expectation.file);

@@ -13,6 +13,7 @@ ENV NODE_ENV=production
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=build /app/dist ./dist
+COPY feeds.json ./
 # /app is root-owned; the database directory must be writable by the runtime user.
 RUN mkdir -p /app/data && chown node:node /app/data
 USER node
