@@ -79,3 +79,25 @@ jobs:
           test "$(curl -sf http://127.0.0.1:8899/api/items)" = "[]"
       - if: always()
         run: docker logs ci || true
+
+  # The oracle is only worth something if it still says what feedparser says.
+  # No `npm ci`: the script uses nothing but Node's own modules, so this check
+  # cannot be disarmed by anything in the dependency tree.
+  oracle-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24.18.0
+      - name: The expectations still match the fixtures they were derived from
+        run: npm run oracle:derive -- --check
+      - name: The fixtures still match feedparser at the pinned commit
+        run: npm run oracle:upstream
+
+  # Lives in another repository so that a pull request cannot reach it, and is
+  # pinned by SHA so that repository cannot silently change what it enforces.
+  # Deleting this job does not disarm it: the required check simply never
+  # reports, and the pull request stays unmergeable.
+  oracle-guard:
+    uses: mrcruz117/mp-e2e-slice-oracle-guard/.github/workflows/oracle-guard.yml@744434b6e7c77bced31c7453cb955649aa1e6944
