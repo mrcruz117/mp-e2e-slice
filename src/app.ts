@@ -17,7 +17,9 @@ SELECT items.id, items.item_id, feeds.title AS feed_title, items.title, items.li
        items.published, items.read
 FROM items
 JOIN feeds ON feeds.id = items.feed_id
-ORDER BY COALESCE(items.published, items.first_seen) DESC
+-- Items first seen in the same Refresh share a date; the rowid breaks the tie,
+-- so a position is the same on every read.
+ORDER BY COALESCE(items.published, items.first_seen) DESC, items.id DESC
 `;
 
 export function createApp(options: { databasePath: string }): FastifyInstance {

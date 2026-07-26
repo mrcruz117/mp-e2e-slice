@@ -5,24 +5,17 @@ import fastifyStatic from "@fastify/static";
 import type { FastifyInstance } from "fastify";
 import { createApp } from "./app.js";
 import { refresh } from "./refresh.js";
-import type { FetchFeed } from "./refresh.js";
+import type { RefreshOptions } from "./refresh.js";
 
-export interface StartOptions {
-  databasePath: string;
-  feeds: string[];
-  fetchFeed: FetchFeed;
+export type StartOptions = RefreshOptions & {
   webRoot: string;
   host: string;
   port: number;
-}
+};
 
 /** Resolves once the server is accepting connections, never before. */
 export async function start(options: StartOptions): Promise<FastifyInstance> {
-  await refresh({
-    databasePath: options.databasePath,
-    feeds: options.feeds,
-    fetchFeed: options.fetchFeed,
-  });
+  await refresh(options);
 
   const app = createApp({ databasePath: options.databasePath });
   await app.register(fastifyStatic, { root: options.webRoot });

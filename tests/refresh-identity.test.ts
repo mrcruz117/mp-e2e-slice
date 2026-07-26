@@ -21,7 +21,34 @@ afterEach(() => {
   database = undefined;
 });
 
+const SHARED_ID = (feedTitle: string, itemTitle: string) =>
+  `<rss version="2.0"><channel><title>${feedTitle}</title>
+<item><guid>urn:shared</guid><title>${itemTitle}</title></item>
+</channel></rss>`;
+
 describe("an Item carries the identity its publisher gave it", () => {
+  test("two Feeds publishing the same id are two Items", async () => {
+    database = temporaryDatabase();
+    const bodies: Record<string, string> = {
+      one: SHARED_ID("One", "From one"),
+      two: SHARED_ID("Two", "From two"),
+    };
+
+    await refresh({
+      databasePath: database.path,
+      feeds: ["one", "two"],
+      fetchFeed: (url) =>
+        Promise.resolve({ status: 200, body: bodies[url] ?? "" }),
+    });
+
+    const items = await readItems(database.path);
+    expect(items.map(({ feedTitle }) => feedTitle).sort()).toEqual([
+      "One",
+      "Two",
+    ]);
+    expect(items.every(({ itemId }) => itemId === "urn:shared")).toBe(true);
+  });
+
   for (const expectation of identityExpectations) {
     test(`${expectation.file}: ${expectation.description}`, async () => {
       database = temporaryDatabase();

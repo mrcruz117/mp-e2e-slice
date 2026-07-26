@@ -36,14 +36,19 @@ const parser = new XMLParser({
   processEntities: true,
 });
 
+/** The node's one non-attribute key: its tag, prefix and all. */
+function keyOf(node: Node): string | undefined {
+  return Object.keys(node).find((name) => name !== ATTRIBUTES);
+}
+
 /** feedparser resolves namespaces; matching on the local name is enough here. */
 function tagOf(node: Node): string {
-  const key = Object.keys(node).find((name) => name !== ATTRIBUTES) ?? "";
+  const key = keyOf(node) ?? "";
   return key.slice(key.indexOf(":") + 1);
 }
 
 function childrenOf(node: Node): Node[] {
-  const key = Object.keys(node).find((name) => name !== ATTRIBUTES);
+  const key = keyOf(node);
   return key === undefined ? [] : ((node[key] ?? []) as Node[]);
 }
 
