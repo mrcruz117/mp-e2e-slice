@@ -44,7 +44,7 @@ export interface RefreshOptions {
   logFeedRefresh?: (line: FeedRefreshLine) => void;
 }
 
-/** Story 33: boot cannot be held hostage by one slow server. */
+/** Boot cannot be held hostage by one slow server. */
 const FETCH_TIMEOUT_MS = 10_000;
 
 const UPSERT_FEED = `
@@ -101,8 +101,7 @@ function storeFeed(
 
 /**
  * The seam's promise, or a rejection once the timeout elapses. A `setTimeout`
- * race rather than `AbortSignal.timeout()`, because the seam is not necessarily
- * HTTP and the specs drive the clock with fake timers.
+ * race rather than `AbortSignal.timeout()`; see ADR-0004.
  */
 async function fetchWithinTimeout(
   fetchFeed: FetchFeed,
@@ -131,7 +130,7 @@ function reasonOf(error: unknown): string {
 async function refreshFeed(
   database: DatabaseSync,
   url: string,
-  options: RefreshOptions,
+  fetchFeed: FetchFeed,
   firstSeen: string,
 ): Promise<FeedRefreshLine> {
   const startedAt = Date.now();
@@ -145,7 +144,7 @@ async function refreshFeed(
 
   let status: number | null = null;
   try {
-    const fetched = await fetchWithinTimeout(options.fetchFeed, url);
+    const fetched = await fetchWithinTimeout(fetchFeed, url);
     status = fetched.status;
     if (status !== 200) {
       return line({
@@ -177,7 +176,7 @@ export async function refresh(options: RefreshOptions): Promise<void> {
   const firstSeen = new Date().toISOString();
   try {
     for (const url of options.feeds) {
-      log(await refreshFeed(database, url, options, firstSeen));
+      log(await refreshFeed(database, url, options.fetchFeed, firstSeen));
     }
   } finally {
     database.close();
