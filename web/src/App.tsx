@@ -19,6 +19,19 @@ export function App() {
     };
   }, []);
 
+  // The click keeps its default behaviour — the browser opens the new tab —
+  // and the mark is fire-and-forget so nothing waits on the round trip.
+  function markRead(id: number) {
+    setItems((current) =>
+      current.map((item) => (item.id === id ? { ...item, read: true } : item)),
+    );
+    fetch(`/api/items/${String(id)}/read`, { method: "POST" }).catch(
+      (error: unknown) => {
+        console.error("Could not mark the Item read", error);
+      },
+    );
+  }
+
   return (
     <main>
       <h1>Feed Reader</h1>
@@ -30,6 +43,9 @@ export function App() {
               href={item.link ?? undefined}
               target="_blank"
               rel="noreferrer"
+              onClick={() => {
+                markRead(item.id);
+              }}
             >
               {item.title ?? "(untitled)"}
             </a>

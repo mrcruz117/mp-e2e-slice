@@ -7,7 +7,7 @@
 
 import { expect, test } from "@playwright/test";
 
-test.describe.skip("reading the list", () => {
+test.describe("reading the list", () => {
   test("every Item renders with its Feed's title, newest first", async ({
     page,
   }) => {

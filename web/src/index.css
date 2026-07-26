@@ -25,6 +25,11 @@ li {
   padding: 0.75rem 0;
 }
 
+/* Read: still in place, just faded. */
+li[data-read="true"] {
+  opacity: 0.45;
+}
+
 .meta {
   display: flex;
   font-size: 0.85rem;
