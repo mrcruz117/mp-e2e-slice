@@ -16,7 +16,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "oracle:vendor": "node scripts/oracle.ts vendor",
+    "oracle:derive": "node scripts/oracle.ts derive",
+    "oracle:upstream": "node scripts/oracle.ts upstream"
   },
   "dependencies": {
     "@fastify/static": "^10.1.2",

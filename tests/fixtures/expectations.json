@@ -1,0 +1,733 @@
+{
+  "upstream": {
+    "repository": "https://github.com/kurtmckee/feedparser.git",
+    "commit": "06b8f292e66676aaab0e9824ba65e2469616e600"
+  },
+  "generatedBy": "node scripts/oracle.ts derive",
+  "expectations": [
+    {
+      "file": "wellformed/atom10/atom10_namespace.xml",
+      "description": "Atom namespace (official)",
+      "expect": "not bozo and feed['title'] == 'Example Atom'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Example Atom"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_map_guid.xml",
+      "description": "entry id maps to guid",
+      "expect": "not bozo and entries[0]['guid'] == 'http://example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "guid",
+      "value": "http://example.com/"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_no_normalization_1.xml",
+      "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
+      "expect": "not bozo and entries[0]['id'] == 'http://www.example.org/thing'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "http://www.example.org/thing"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_no_normalization_2.xml",
+      "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
+      "expect": "not bozo and entries[0]['id'] == 'http://www.example.org/Thing'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "http://www.example.org/Thing"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_no_normalization_3.xml",
+      "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
+      "expect": "not bozo and entries[0]['id'] == 'http://www.EXAMPLE.org/thing'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "http://www.EXAMPLE.org/thing"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_no_normalization_4.xml",
+      "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
+      "expect": "not bozo and entries[0]['id'] == 'HTTP://www.example.org/thing'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "HTTP://www.example.org/thing"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_no_normalization_5.xml",
+      "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
+      "expect": "not bozo and entries[0]['id'] == 'http://www.example.com/~bob'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "http://www.example.com/~bob"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_no_normalization_6.xml",
+      "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
+      "expect": "not bozo and entries[0]['id'] == 'http://www.example.com/%7ebob'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "http://www.example.com/%7ebob"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_no_normalization_7.xml",
+      "description": "entry id not normalized (see Atom 1.0 section 4.2.6.1)",
+      "expect": "not bozo and entries[0]['id'] == 'http://www.example.com/%7Ebob'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "http://www.example.com/%7Ebob"
+    },
+    {
+      "file": "wellformed/atom10/entry_id_with_attributes.xml",
+      "description": "entry id retrieved when element contains attributes",
+      "expect": "not bozo and entries[0]['id'] == 'right'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "right"
+    },
+    {
+      "file": "wellformed/atom10/entry_id.xml",
+      "description": "entry id",
+      "expect": "not bozo and entries[0]['id'] == 'http://example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "http://example.com/"
+    },
+    {
+      "file": "wellformed/atom10/entry_link_alternate_map_link_2.xml",
+      "description": "entry link href maps to link if rel=\"alternate\" and type=\"application/xhtml+xml\"",
+      "expect": "not bozo and entries[0]['link'] == 'http://www.example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://www.example.com/"
+    },
+    {
+      "file": "wellformed/atom10/entry_link_alternate_map_link_3.xml",
+      "description": "entry link href maps to link if rel=\"alternate\", even if type is not present",
+      "expect": "not bozo and entries[0]['link'] == 'http://www.example.com/alternate'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://www.example.com/alternate"
+    },
+    {
+      "file": "wellformed/atom10/entry_link_alternate_map_link.xml",
+      "description": "entry link href maps to link if rel=\"alternate\" and type=\"text/html\"",
+      "expect": "not bozo and entries[0]['link'] == 'http://www.example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://www.example.com/"
+    },
+    {
+      "file": "wellformed/atom10/entry_title_base64_2.xml",
+      "description": "entry title base64-encoded",
+      "expect": "not bozo and entries[0]['title'] == '<p>History of the &lt;blink&gt; tag</p>'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "<p>History of the &lt;blink&gt; tag</p>"
+    },
+    {
+      "file": "wellformed/atom10/entry_title_base64.xml",
+      "description": "entry title base64-encoded",
+      "expect": "not bozo and entries[0]['title'] == 'Example <b>Atom</b>'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "Example <b>Atom</b>"
+    },
+    {
+      "file": "wellformed/atom10/entry_title_escaped_markup.xml",
+      "description": "entry title escaped HTML",
+      "expect": "not bozo and entries[0]['title'] == 'Example <b>Atom</b>'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "Example <b>Atom</b>"
+    },
+    {
+      "file": "wellformed/atom10/entry_title_inline_markup_2.xml",
+      "description": "entry title inline XHTML with escaped markup",
+      "expect": "not bozo and entries[0]['title'] == 'History of the &lt;blink&gt; tag'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "History of the &lt;blink&gt; tag"
+    },
+    {
+      "file": "wellformed/atom10/entry_title_inline_markup.xml",
+      "description": "entry title inline XHTML",
+      "expect": "not bozo and entries[0]['title'] == 'Example <b>Atom</b>'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "Example <b>Atom</b>"
+    },
+    {
+      "file": "wellformed/atom10/entry_title_text_plain_brackets.xml",
+      "description": "entry title with explicit type='text' contains brackets that are not markup",
+      "expect": "not bozo and entries[0]['title'] == 'History of the <blink> tag'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "History of the <blink> tag"
+    },
+    {
+      "file": "wellformed/atom10/entry_title_text_plain.xml",
+      "description": "entry title with explicit type='text'",
+      "expect": "not bozo and entries[0]['title'] == 'Example Atom'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "Example Atom"
+    },
+    {
+      "file": "wellformed/atom10/entry_title_type_empty-no-crash.xml",
+      "description": "entry title type='' - no base64/unicodedecodeerror crash",
+      "expect": "entries[0]['title'] == 'evil'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "evil"
+    },
+    {
+      "file": "wellformed/atom10/entry_title.xml",
+      "description": "entry title",
+      "expect": "not bozo and entries[0]['title'] == 'Example Atom'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "Example Atom"
+    },
+    {
+      "file": "wellformed/atom10/feed_id_map_guid.xml",
+      "description": "feed id",
+      "expect": "not bozo and feed['guid'] == 'http://example.com/'",
+      "scope": "feed",
+      "field": "guid",
+      "value": "http://example.com/"
+    },
+    {
+      "file": "wellformed/atom10/feed_id.xml",
+      "description": "feed id",
+      "expect": "not bozo and feed['id'] == 'http://example.com/'",
+      "scope": "feed",
+      "field": "id",
+      "value": "http://example.com/"
+    },
+    {
+      "file": "wellformed/atom10/feed_link_alternate_map_link_2.xml",
+      "description": "feed link href maps to link if rel=\"alternate\" and type=\"application/xhtml+xml\"",
+      "expect": "not bozo and feed['link'] == 'http://www.example.com/'",
+      "scope": "feed",
+      "field": "link",
+      "value": "http://www.example.com/"
+    },
+    {
+      "file": "wellformed/atom10/feed_link_alternate_map_link.xml",
+      "description": "feed link href maps to link if rel=\"alternate\" and type=\"text/html\"",
+      "expect": "not bozo and feed['link'] == 'http://www.example.com/'",
+      "scope": "feed",
+      "field": "link",
+      "value": "http://www.example.com/"
+    },
+    {
+      "file": "wellformed/atom10/feed_title_base64_2.xml",
+      "description": "feed title base64-encoded",
+      "expect": "not bozo and feed['title'] == '<p>History of the &lt;blink&gt; tag</p>'",
+      "scope": "feed",
+      "field": "title",
+      "value": "<p>History of the &lt;blink&gt; tag</p>"
+    },
+    {
+      "file": "wellformed/atom10/feed_title_base64.xml",
+      "description": "feed title base64-encoded",
+      "expect": "not bozo and feed['title'] == 'Example <b>Atom</b>'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Example <b>Atom</b>"
+    },
+    {
+      "file": "wellformed/atom10/feed_title_escaped_markup.xml",
+      "description": "feed title escaped HTML",
+      "expect": "not bozo and feed['title'] == 'Example <b>Atom</b>'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Example <b>Atom</b>"
+    },
+    {
+      "file": "wellformed/atom10/feed_title_inline_markup_2.xml",
+      "description": "feed title inline XHTML with escaped markup",
+      "expect": "not bozo and feed['title'] == 'History of the &lt;blink&gt; tag'",
+      "scope": "feed",
+      "field": "title",
+      "value": "History of the &lt;blink&gt; tag"
+    },
+    {
+      "file": "wellformed/atom10/feed_title_inline_markup.xml",
+      "description": "feed title inline XHTML",
+      "expect": "not bozo and feed['title'] == 'Example <b>Atom</b>'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Example <b>Atom</b>"
+    },
+    {
+      "file": "wellformed/atom10/feed_title_text_plain.xml",
+      "description": "feed title with explicit type='text'",
+      "expect": "not bozo and feed['title'] == 'Example Atom'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Example Atom"
+    },
+    {
+      "file": "wellformed/atom10/feed_title.xml",
+      "description": "feed title",
+      "expect": "not bozo and feed['title'] == 'Example Atom'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Example Atom"
+    },
+    {
+      "file": "wellformed/rss/channel_dc_date_parsed.xml",
+      "description": "channel dc:date parsed",
+      "expect": "not bozo and feed['updated_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
+      "scope": "feed",
+      "field": "updated_parsed",
+      "value": [
+        2003,
+        12,
+        31,
+        10,
+        14,
+        55,
+        2,
+        365,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/channel_dc_date.xml",
+      "description": "channel dc:date",
+      "expect": "not bozo and feed['updated'] == '2003-12-31T10:14:55Z'",
+      "scope": "feed",
+      "field": "updated",
+      "value": "2003-12-31T10:14:55Z"
+    },
+    {
+      "file": "wellformed/rss/channel_dc_title.xml",
+      "description": "channel dc:title",
+      "expect": "not bozo and feed['title'] == 'Example title'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Example title"
+    },
+    {
+      "file": "wellformed/rss/channel_dcterms_issued_parsed.xml",
+      "description": "channel dcterms:issued parsed",
+      "expect": "not bozo and feed['published_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
+      "scope": "feed",
+      "field": "published_parsed",
+      "value": [
+        2003,
+        12,
+        31,
+        10,
+        14,
+        55,
+        2,
+        365,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/channel_dcterms_issued.xml",
+      "description": "channel dcterms:issued",
+      "expect": "not bozo and feed['published'] == '2003-12-31T10:14:55Z'",
+      "scope": "feed",
+      "field": "published",
+      "value": "2003-12-31T10:14:55Z"
+    },
+    {
+      "file": "wellformed/rss/channel_dcterms_modified_parsed.xml",
+      "description": "channel dcterms:modified parsed",
+      "expect": "not bozo and feed['updated_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
+      "scope": "feed",
+      "field": "updated_parsed",
+      "value": [
+        2003,
+        12,
+        31,
+        10,
+        14,
+        55,
+        2,
+        365,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/channel_dcterms_modified.xml",
+      "description": "channel dcterms:modified",
+      "expect": "not bozo and feed['updated'] == '2003-12-31T10:14:55Z'",
+      "scope": "feed",
+      "field": "updated",
+      "value": "2003-12-31T10:14:55Z"
+    },
+    {
+      "file": "wellformed/rss/channel_image_link_conflict.xml",
+      "description": "image link does not conflict with channel link",
+      "expect": "not bozo and feed['link'] == 'http://channel.example.com/'",
+      "scope": "feed",
+      "field": "link",
+      "value": "http://channel.example.com/"
+    },
+    {
+      "file": "wellformed/rss/channel_image_title_conflict.xml",
+      "description": "image title does not conflict with channel title",
+      "expect": "not bozo and feed['title'] == 'Real title'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Real title"
+    },
+    {
+      "file": "wellformed/rss/channel_lastBuildDate_parsed.xml",
+      "description": "channel lastBuildDate parsed",
+      "expect": "not bozo and feed['updated_parsed'] == (2002, 9, 7, 0, 0, 1, 5, 250, 0)",
+      "scope": "feed",
+      "field": "updated_parsed",
+      "value": [
+        2002,
+        9,
+        7,
+        0,
+        0,
+        1,
+        5,
+        250,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/channel_lastBuildDate.xml",
+      "description": "channel lastBuildDate",
+      "expect": "not bozo and feed['updated'] == 'Sat, 07 Sep 2002 00:00:01 GMT'",
+      "scope": "feed",
+      "field": "updated",
+      "value": "Sat, 07 Sep 2002 00:00:01 GMT"
+    },
+    {
+      "file": "wellformed/rss/channel_link.xml",
+      "description": "normal link",
+      "expect": "not bozo and feed['link'] == 'http://example.com/'",
+      "scope": "feed",
+      "field": "link",
+      "value": "http://example.com/"
+    },
+    {
+      "file": "wellformed/rss/channel_pubDate_map_updated_parsed.xml",
+      "description": "channel pubDate parsed and mapped to published_parsed",
+      "expect": "not bozo and feed['published_parsed'] == (2004, 1, 1, 19, 48, 21, 3, 1, 0)",
+      "scope": "feed",
+      "field": "published_parsed",
+      "value": [
+        2004,
+        1,
+        1,
+        19,
+        48,
+        21,
+        3,
+        1,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/channel_pubDate.xml",
+      "description": "channel pubDate",
+      "expect": "not bozo and feed['published'] == 'Thu, 01 Jan 2004 19:48:21 GMT'",
+      "scope": "feed",
+      "field": "published",
+      "value": "Thu, 01 Jan 2004 19:48:21 GMT"
+    },
+    {
+      "file": "wellformed/rss/channel_textInput_link_conflict.xml",
+      "description": "textInput link does not conflict with channel link",
+      "expect": "not bozo and feed['link'] == 'http://channel.example.com/'",
+      "scope": "feed",
+      "field": "link",
+      "value": "http://channel.example.com/"
+    },
+    {
+      "file": "wellformed/rss/channel_textInput_title_conflict.xml",
+      "description": "textInput title does not conflict with channel title",
+      "expect": "not bozo and feed['title'] == 'Real title'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Real title"
+    },
+    {
+      "file": "wellformed/rss/channel_title_apos.xml",
+      "description": "channel title contains apos entity",
+      "expect": "not bozo and feed['title'] == \"Mark's title\"",
+      "scope": "feed",
+      "field": "title",
+      "value": "Mark's title"
+    },
+    {
+      "file": "wellformed/rss/channel_title_gt.xml",
+      "description": "channel title contains gt entity",
+      "expect": "not bozo and feed['title'] == '2 > 1'",
+      "scope": "feed",
+      "field": "title",
+      "value": "2 > 1"
+    },
+    {
+      "file": "wellformed/rss/channel_title_lt.xml",
+      "description": "channel title contains lt entity",
+      "expect": "not bozo and feed['title'] == '1 < 2'",
+      "scope": "feed",
+      "field": "title",
+      "value": "1 < 2"
+    },
+    {
+      "file": "wellformed/rss/channel_title.xml",
+      "description": "normal title",
+      "expect": "not bozo and feed['title'] == 'Example feed'",
+      "scope": "feed",
+      "field": "title",
+      "value": "Example feed"
+    },
+    {
+      "file": "wellformed/rss/entity_in_doctype.xml",
+      "description": "AT&T",
+      "expect": "not bozo and entries[0]['guid'] == 'tag:example.com,2006-05-04:/blog/'",
+      "scope": "item",
+      "index": 0,
+      "field": "guid",
+      "value": "tag:example.com,2006-05-04:/blog/"
+    },
+    {
+      "file": "wellformed/rss/item_dc_date_parsed.xml",
+      "description": "item dc:date parsed",
+      "expect": "not bozo and entries[0]['updated_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
+      "scope": "item",
+      "index": 0,
+      "field": "updated_parsed",
+      "value": [
+        2003,
+        12,
+        31,
+        10,
+        14,
+        55,
+        2,
+        365,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/item_dc_date.xml",
+      "description": "item dc:date",
+      "expect": "not bozo and entries[0]['updated'] == '2003-12-31T10:14:55Z'",
+      "scope": "item",
+      "index": 0,
+      "field": "updated",
+      "value": "2003-12-31T10:14:55Z"
+    },
+    {
+      "file": "wellformed/rss/item_dc_title.xml",
+      "description": "item dc:title",
+      "expect": "not bozo and entries[0]['title'] == 'Example title'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "Example title"
+    },
+    {
+      "file": "wellformed/rss/item_dcterms_issued_parsed.xml",
+      "description": "item dcterms:issued parsed",
+      "expect": "not bozo and entries[0]['published_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
+      "scope": "item",
+      "index": 0,
+      "field": "published_parsed",
+      "value": [
+        2003,
+        12,
+        31,
+        10,
+        14,
+        55,
+        2,
+        365,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/item_dcterms_issued.xml",
+      "description": "item dcterms:issued",
+      "expect": "not bozo and entries[0]['published'] == '2003-12-31T10:14:55Z'",
+      "scope": "item",
+      "index": 0,
+      "field": "published",
+      "value": "2003-12-31T10:14:55Z"
+    },
+    {
+      "file": "wellformed/rss/item_dcterms_modified_parsed.xml",
+      "description": "item dcterms:modified parsed",
+      "expect": "not bozo and entries[0]['updated_parsed'] == (2003, 12, 31, 10, 14, 55, 2, 365, 0)",
+      "scope": "item",
+      "index": 0,
+      "field": "updated_parsed",
+      "value": [
+        2003,
+        12,
+        31,
+        10,
+        14,
+        55,
+        2,
+        365,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/item_dcterms_modified.xml",
+      "description": "item dcterms:modified",
+      "expect": "not bozo and entries[0]['updated'] == '2003-12-31T10:14:55Z'",
+      "scope": "item",
+      "index": 0,
+      "field": "updated",
+      "value": "2003-12-31T10:14:55Z"
+    },
+    {
+      "file": "wellformed/rss/item_guid_conflict_link.xml",
+      "description": "item guid does not override link",
+      "expect": "not bozo and entries[0]['link'] == 'http://link.example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://link.example.com/"
+    },
+    {
+      "file": "wellformed/rss/item_guid_isPermaLink_conflict_link.xml",
+      "description": "item guid does not override link even if isPermaLink=\"true\"",
+      "expect": "not bozo and entries[0]['link'] == 'http://link.example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://link.example.com/"
+    },
+    {
+      "file": "wellformed/rss/item_guid_isPermaLink_map_link.xml",
+      "description": "item guid maps to link when isPermaLink=\"true\"",
+      "expect": "not bozo and entries[0]['link'] == 'http://guid.example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://guid.example.com/"
+    },
+    {
+      "file": "wellformed/rss/item_guid_map_link.xml",
+      "description": "item guid maps to link",
+      "expect": "not bozo and entries[0]['link'] == 'http://guid.example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://guid.example.com/"
+    },
+    {
+      "file": "wellformed/rss/item_guid_not_permalink_conflict_link.xml",
+      "description": "item guid (not permalink) is not duplicated into link",
+      "expect": "not bozo and entries[0]['link'] == 'http://link.example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://link.example.com/"
+    },
+    {
+      "file": "wellformed/rss/item_guid_not_permalink_not_url.xml",
+      "description": "item guid not permalink is not resolved as a URL",
+      "expect": "not bozo and entries[0]['id'] == 'abc'",
+      "scope": "item",
+      "index": 0,
+      "field": "id",
+      "value": "abc"
+    },
+    {
+      "file": "wellformed/rss/item_guid.xml",
+      "description": "item guid",
+      "expect": "not bozo and entries[0]['guid'] == 'http://guid.example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "guid",
+      "value": "http://guid.example.com/"
+    },
+    {
+      "file": "wellformed/rss/item_image_link_conflict.xml",
+      "description": "image link does not conflict with item link",
+      "expect": "not bozo and entries[0]['link'] == 'http://item.TEST/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://item.TEST/"
+    },
+    {
+      "file": "wellformed/rss/item_link.xml",
+      "description": "item link",
+      "expect": "not bozo and entries[0]['link'] == 'http://example.com/'",
+      "scope": "item",
+      "index": 0,
+      "field": "link",
+      "value": "http://example.com/"
+    },
+    {
+      "file": "wellformed/rss/item_pubDate_map_updated_parsed.xml",
+      "description": "item pubDate parsed and mapped to published_parsed",
+      "expect": "not bozo and entries[0]['published_parsed'] == (2004, 1, 1, 19, 48, 21, 3, 1, 0)",
+      "scope": "item",
+      "index": 0,
+      "field": "published_parsed",
+      "value": [
+        2004,
+        1,
+        1,
+        19,
+        48,
+        21,
+        3,
+        1,
+        0
+      ]
+    },
+    {
+      "file": "wellformed/rss/item_pubDate.xml",
+      "description": "item pubDate",
+      "expect": "not bozo and entries[0]['published'] == 'Thu, 01 Jan 2004 19:48:21 GMT'",
+      "scope": "item",
+      "index": 0,
+      "field": "published",
+      "value": "Thu, 01 Jan 2004 19:48:21 GMT"
+    },
+    {
+      "file": "wellformed/rss/item_title.xml",
+      "description": "item title",
+      "expect": "not bozo and entries[0]['title'] == 'Item 1 title'",
+      "scope": "item",
+      "index": 0,
+      "field": "title",
+      "value": "Item 1 title"
+    }
+  ]
+}
