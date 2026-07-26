@@ -5,6 +5,8 @@ import { defineConfig } from "@playwright/test";
 // localhost by e2e/feed-server.ts, so the app still fetches them over HTTP.
 const EMPTY_PORT = 4173;
 const READING_PORT = 4174;
+// Fixed in e2e/feed-server.ts, in the Feed XML it serves, and in the config
+// that lists those Feeds; here only to wait on.
 const FEED_SERVER_PORT = 4175;
 
 const emptyUrl = `http://127.0.0.1:${String(EMPTY_PORT)}`;
@@ -34,7 +36,6 @@ export default defineConfig({
       command: "node e2e/feed-server.ts",
       url: `http://127.0.0.1:${String(FEED_SERVER_PORT)}/blog.xml`,
       reuseExistingServer: false,
-      env: { FEED_SERVER_PORT: String(FEED_SERVER_PORT) },
     },
     {
       command: "rm -f data/e2e.db && npm run build && npm start",

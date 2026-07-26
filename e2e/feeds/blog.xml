@@ -6,13 +6,13 @@
     <item>
       <guid>urn:local-blog:2</guid>
       <title>Blog: the newer one</title>
-      <link>http://127.0.0.1:4175/posts/blog-2</link>
+      <link>http://127.0.0.1:4175/items/blog-2</link>
       <pubDate>Tue, 05 Mar 2024 12:00:00 GMT</pubDate>
     </item>
     <item>
       <guid>urn:local-blog:1</guid>
       <title>Blog: the older one</title>
-      <link>http://127.0.0.1:4175/posts/blog-1</link>
+      <link>http://127.0.0.1:4175/items/blog-1</link>
       <pubDate>Sun, 03 Mar 2024 12:00:00 GMT</pubDate>
     </item>
   </channel>

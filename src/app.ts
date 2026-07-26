@@ -59,10 +59,7 @@ export function createApp(options: { databasePath: string }): FastifyInstance {
       },
     },
     (request, reply) => {
-      const { changes } = markRead.run(request.params.id);
-      if (changes === 0n) {
-        return reply.code(404).send({ message: "No such Item" });
-      }
+      markRead.run(request.params.id);
       return reply.code(204).send();
     },
   );
