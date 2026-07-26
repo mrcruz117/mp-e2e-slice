@@ -3,15 +3,15 @@
 The commands that decide whether a change is done. Do not invent others, and do
 not weaken or skip one to get a green result.
 
-| Check       | Command                | What it proves                       |
-| ----------- | ---------------------- | ------------------------------------ |
-| Types       | `npm run typecheck`    | `tsc --noEmit` is clean              |
-| Lint        | `npm run lint`         | typescript-eslint, type-aware rules  |
-| Format      | `npm run format:check` | Prettier reports no drift            |
-| Unit        | `npm test`             | Vitest, including parser fixtures    |
-| End-to-end  | `npm run test:e2e`     | Playwright against the built app     |
-| Image       | `docker build .`       | The production image still builds    |
-| Oracle      | CI job `oracle-guard`  | Fixtures match upstream and untouched |
+| Check      | Command                | What it proves                        |
+| ---------- | ---------------------- | ------------------------------------- |
+| Types      | `npm run typecheck`    | `tsc --noEmit` is clean               |
+| Lint       | `npm run lint`         | typescript-eslint, type-aware rules   |
+| Format     | `npm run format:check` | Prettier reports no drift             |
+| Unit       | `npm test`             | Vitest, including parser fixtures     |
+| End-to-end | `npm run test:e2e`     | Playwright against the built app      |
+| Image      | `docker build .`       | The production image still builds     |
+| Oracle     | CI job `oracle-guard`  | Fixtures match upstream and untouched |
 
 All seven are required status checks on `main`.
 
