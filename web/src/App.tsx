@@ -24,8 +24,26 @@ export function App() {
       <h1>Feed Reader</h1>
       <ul data-testid="item-list">
         {items.map((item) => (
-          <li key={item.id} data-testid="item">
-            {item.title}
+          <li key={item.id} data-testid="item" data-read={String(item.read)}>
+            <a
+              data-testid="item-title"
+              href={item.link ?? undefined}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {item.title ?? "(untitled)"}
+            </a>
+            <p className="meta">
+              <span data-testid="feed-title">{item.feedTitle}</span>
+              <time
+                data-testid="item-published"
+                dateTime={item.published ?? ""}
+              >
+                {item.published === null
+                  ? ""
+                  : new Date(item.published).toDateString()}
+              </time>
+            </p>
           </li>
         ))}
       </ul>
