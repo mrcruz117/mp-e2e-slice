@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Item } from "../../src/app.js";
+import type { Item } from "../../src/items.js";
 
 export function App() {
   const [items, setItems] = useState<Item[]>([]);
@@ -25,11 +25,7 @@ export function App() {
       <ul data-testid="item-list">
         {items.map((item) => (
           <li key={item.id} data-testid="item">
-            <a href={item.link ?? "#"} target="_blank" rel="noreferrer">
-              {item.title}
-            </a>
-            <span>{item.feedTitle}</span>
-            <time>{item.published}</time>
+            {item.title}
           </li>
         ))}
       </ul>

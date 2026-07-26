@@ -6,7 +6,8 @@ test("a reader with no Feeds configured sees an empty Item list, not an error", 
   const failures: string[] = [];
   page.on("pageerror", (error) => failures.push(error.message));
   page.on("response", (response) => {
-    if (response.status() >= 400) {
+    // The app ships no favicon; browsers that ask for one anyway are not a bug.
+    if (response.status() >= 400 && !response.url().endsWith("/favicon.ico")) {
       failures.push(`${String(response.status())} ${response.url()}`);
     }
   });

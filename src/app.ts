@@ -1,14 +1,6 @@
 import Fastify, { type FastifyInstance } from "fastify";
 import { openDatabase } from "./db.js";
-
-export interface Item {
-  id: number;
-  feedTitle: string | null;
-  title: string | null;
-  link: string | null;
-  published: string | null;
-  read: boolean;
-}
+import type { Item } from "./items.js";
 
 interface ItemRow {
   id: number;
@@ -38,6 +30,8 @@ export function createApp(options: { databasePath: string }): FastifyInstance {
   const selectItems = db.prepare(SELECT_ITEMS);
 
   app.get("/api/items", (): Item[] =>
+    // node:sqlite types rows as Record<string, SQLOutputValue>; the column list
+    // above is what actually fixes their shape, so the cast is the assertion.
     (selectItems.all() as unknown as ItemRow[]).map((row) => ({
       id: row.id,
       feedTitle: row.feed_title,

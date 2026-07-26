@@ -66,4 +66,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - run: docker build .
+      - run: docker build -t mp-e2e-slice:ci .
+      # The image building is not the claim; the image serving is.
+      - name: Run the image and serve a request
+        run: |
+          docker run -d --name ci -p 8899:8899 -e PORT=8899 mp-e2e-slice:ci
+          for _ in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8899/api/items >/dev/null && break
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:8899/ >/dev/null
+          test "$(curl -sf http://127.0.0.1:8899/api/items)" = "[]"
+      - if: always()
+        run: docker logs ci || true
