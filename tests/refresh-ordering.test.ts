@@ -33,7 +33,7 @@ function serve(bodies: Record<string, string>) {
     Promise.resolve({ status: 200, body: bodies[url] ?? "" });
 }
 
-describe.skip("Items from every Feed appear in one list, newest first", () => {
+describe("Items from every Feed appear in one list, newest first", () => {
   test("dated Items are ordered by their published date across Feeds", async () => {
     database = temporaryDatabase();
     await refresh({
