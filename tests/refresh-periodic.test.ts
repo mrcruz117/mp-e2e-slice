@@ -26,7 +26,7 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-describe.skip("Refresh keeps running while the app is alive", () => {
+describe("Refresh keeps running while the app is alive", () => {
   test("an Item published after boot appears without a restart", async () => {
     vi.useFakeTimers();
     database = temporaryDatabase();

@@ -4,13 +4,16 @@
 import fastifyStatic from "@fastify/static";
 import type { FastifyInstance } from "fastify";
 import { createApp } from "./app.js";
-import { refresh } from "./refresh.js";
+import { DEFAULT_REFRESH_INTERVAL_MS } from "./config.js";
+import { refresh, startRefreshing } from "./refresh.js";
 import type { RefreshOptions } from "./refresh.js";
 
 export type StartOptions = RefreshOptions & {
   webRoot: string;
   host: string;
   port: number;
+  /** Optional so that the specs written before the timer stay unedited. */
+  refreshIntervalMs?: number;
 };
 
 /** Resolves once the server is accepting connections, never before. */
@@ -19,16 +22,30 @@ export async function start(options: StartOptions): Promise<FastifyInstance> {
   // still not listening until the Refresh has finished.
   const app = createApp({ databasePath: options.databasePath });
 
-  await refresh({
-    ...options,
-    logFeedRefresh:
-      options.logFeedRefresh ??
-      ((line) => {
-        app.log.info(line, "feed refresh");
-      }),
-  });
+  const logFeedRefresh =
+    options.logFeedRefresh ??
+    ((line) => {
+      app.log.info(line, "feed refresh");
+    });
+
+  await refresh({ ...options, logFeedRefresh });
 
   await app.register(fastifyStatic, { root: options.webRoot });
+
+  // The same Refresh as the boot one, logging included, on a timer from here on.
+  const stopRefreshing = startRefreshing({
+    ...options,
+    logFeedRefresh,
+    intervalMs: options.refreshIntervalMs ?? DEFAULT_REFRESH_INTERVAL_MS,
+    logRefreshError: (error) => {
+      app.log.error({ err: error }, "periodic refresh failed");
+    },
+  });
+  app.addHook("onClose", (_instance, done) => {
+    stopRefreshing();
+    done();
+  });
+
   await app.listen({ host: options.host, port: options.port });
   return app;
 }
