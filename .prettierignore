@@ -3,3 +3,5 @@ coverage
 playwright-report
 test-results
 package-lock.json
+# Vendored from feedparser and derived from it. Not ours to reformat.
+tests/fixtures
