@@ -43,7 +43,7 @@ async function seedTwoItems() {
   return database.path;
 }
 
-describe.skip("the reader's progress is remembered", () => {
+describe("the reader's progress is remembered", () => {
   test("marking an Item read is visible on the next read, and only for that Item", async () => {
     const path = await seedTwoItems();
     const [first, second] = await readItems(path);

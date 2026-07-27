@@ -11,6 +11,7 @@
     "build:web": "vite build",
     "build:server": "tsc -p tsconfig.build.json",
     "start": "node dist/server/server.js",
+    "demo": "npm run build && node scripts/demo.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
